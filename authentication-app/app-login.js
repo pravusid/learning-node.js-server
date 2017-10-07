@@ -5,6 +5,7 @@ const hasher = bkfd2Password();
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 
 const app = express();
 app.use(bodyParser.urlencoded({extended: false}));
@@ -55,6 +56,30 @@ passport.use(new LocalStrategy(
   }
 ));
 
+passport.use(new FacebookStrategy({
+    clientID: '123983388328324',
+    clientSecret: '7d690cf5613b4b2a468010aee07828fd',
+    callbackURL: '/facebook/callback'
+  },
+  (accessToken, refreshToken, profile, done) => {
+    console.log(profile);
+    const authId = 'facebook:'+profile.id;
+    for(let i=0; i<users.length; i++) {
+      const user = users[i];
+      if(user.authId === authId) {
+        return done(null, user);
+      }
+    }
+    const newUser = {
+      'authId': authId,
+      'displayName': profile.displayName,
+      'email': profile.emails[0].value
+    };
+    users.push(newUser);
+    done(null, newUser);
+  }
+));
+
 app.get('/', (req, resp) => {
   let msg = `
     <h1>Welcome</h1>
@@ -84,6 +109,9 @@ app.get('/login', (req,resp) => {
       </p>
       <p>
         <button type="submit">로그인</button>
+      </p>
+      <p>
+        <h3><a href="/facebook">facebook</a></h3>
       </p>
     </form>
   `;
@@ -139,6 +167,14 @@ app.post('/signup', (req, resp) => {
     });
   });
 });
+
+// 타사인증 (Facebook)
+app.get('/facebook', passport.authenticate('facebook'));
+
+app.get('/facebook/callback', passport.authenticate('facebook', {
+  successRedirect: '/',
+  failureRedirect: '/login'
+}));
 
 app.listen(8080, () => {
   console.log('http://localhost:8080');
