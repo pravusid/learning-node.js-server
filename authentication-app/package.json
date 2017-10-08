@@ -13,5 +13,9 @@
     "passport-facebook": "^2.1.1",
     "passport-local": "^1.0.0",
     "pbkdf2-password": "^1.2.1"
+  },
+  "dependencies": {
+    "express-mysql-session": "^1.2.2",
+    "mysql": "^2.15.0"
   }
 }
