@@ -1,0 +1,56 @@
+{
+  "name": "express-babel-jest",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "prestart": "yarn run -s build",
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.js --exec \"node -r dotenv/config -r babel-register\"",
+    "clean": "rimraf dist",
+    "build": "yarn run clean && mkdir -p dist && babel src -s -D -d dist",
+    "test": "jest --watch",
+    "lint": "esw -w src test"
+  },
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "morgan": "^1.9.0",
+    "pug": "^2.0.3",
+    "rimraf": "^2.6.2"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.2",
+    "babel-jest": "^22.4.3",
+    "babel-register": "^6.26.0",
+    "dotenv": "^5.0.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.10.0",
+    "eslint-plugin-jest": "^21.15.0",
+    "eslint-watch": "^3.1.4",
+    "jest": "^22.4.3",
+    "nodemon": "^1.17.3",
+    "supertest": "^3.0.0"
+  },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
+    ],
+    "plugins": ["transform-object-rest-spread", "transform-class-properties"]
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
