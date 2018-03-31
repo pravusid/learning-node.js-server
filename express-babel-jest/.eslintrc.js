@@ -9,7 +9,7 @@ module.exports = {
     node: true,
     jest: true,
   },
-  extends: ['eslint:recommended'],
+  extends: ['airbnb-base'],
   rules: {
     'jest/no-focused-tests': 2,
     'jest/no-identical-title': 2,
